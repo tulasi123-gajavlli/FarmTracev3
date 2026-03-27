@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Supply Chain - Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <div class="bg-white rounded-2xl shadow-2xl p-8">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-600 to-blue-600 rounded-full mb-4">
+                    <i class="fas fa-leaf text-white text-3xl"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Farm Supply Chain</h1>
+                <p class="text-gray-600">Login to your account</p>
+            </div>
+
+            <div id="loginForm">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                        <input type="text" id="username" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Enter your username">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Enter your password">
+                    </div>
+                    
+                    <button onclick="handleLogin()" 
+                        class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">Don't have an account? 
+                        <button onclick="showRegister()" class="text-green-600 hover:text-green-700 font-semibold">Register here</button>
+                    </p>
+                </div>
+
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <p class="text-xs text-gray-500 font-semibold mb-2">Demo Accounts:</p>
+                    <p class="text-xs text-gray-600">Staff: admin / admin123</p>
+                    <p class="text-xs text-gray-600">Customer: customer / customer123</p>
+                </div>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                        <input type="text" id="regUsername" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Choose a username">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                        <input type="password" id="regPassword" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Choose a password">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Account Type</label>
+                        <select id="regRole" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="customer">Customer (Track Products)</option>
+                            <option value="staff">Staff (Manage Products)</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="handleRegister()" 
+                        class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-user-plus mr-2"></i>Register
+                    </button>
+                </div>
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">Already have an account? 
+                        <button onclick="showLogin()" class="text-green-600 hover:text-green-700 font-semibold">Login here</button>
+                    </p>
+                </div>
+            </div>
+
+            <div id="message" class="mt-4 hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('message').classList.add('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('message').classList.add('hidden');
+        }
+
+        function showMessage(message, isError = false) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = `mt-4 p-4 rounded-lg ${isError ? 'bg-red-50 border-2 border-red-500 text-red-800' : 'bg-green-50 border-2 border-green-500 text-green-800'}`;
+            messageDiv.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            messageDiv.classList.remove('hidden');
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showMessage('Please enter both username and password', true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('Login successful! Redirecting...', false);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    showMessage(data.error || 'Login failed', true);
+                }
+            } catch (error) {
+                showMessage('Connection error. Please try again.', true);
+            }
+        }
+
+        async function handleRegister() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const role = document.getElementById('regRole').value;
+
+            if (!username || !password) {
+                showMessage('Please enter both username and password', true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('Registration successful! Please login.', false);
+                    setTimeout(() => {
+                        showLogin();
+                        document.getElementById('username').value = username;
+                    }, 1500);
+                } else {
+                    showMessage(data.error || 'Registration failed', true);
+                }
+            } catch (error) {
+                showMessage('Connection error. Please try again.', true);
+            }
+        }
+
+        // Allow Enter key to submit
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (!document.getElementById('registerForm').classList.contains('hidden')) {
+                    handleRegister();
+                } else {
+                    handleLogin();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

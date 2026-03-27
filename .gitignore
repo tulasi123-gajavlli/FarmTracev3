@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv
+venv/
+ENV/
+.env
+
+# Blockchain
+contract_address.txt
+compiled_contract.json
+contract_abi.json
+
+# Assets (generated)
+backend/qr_codes/*.png
+backend/certificates/*
+backend/product_photos/*
+qr_codes/
+certificates/
+product_photos/
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

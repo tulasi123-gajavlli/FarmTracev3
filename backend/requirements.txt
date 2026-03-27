@@ -1,0 +1,8 @@
+flask
+flask-cors
+web3
+solcx
+qrcode
+python-dotenv
+eth-tester
+py-solc-x

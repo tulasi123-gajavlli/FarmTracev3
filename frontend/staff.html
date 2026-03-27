@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Supply Chain Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto p-6">
+        <header class="bg-gradient-to-r from-green-600 to-blue-600 text-white p-8 rounded-lg shadow-xl mb-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-4xl font-bold flex items-center gap-3">
+                        <i class="fas fa-tractor"></i>
+                        Farm Supply Chain Management
+                    </h1>
+                    <p class="mt-2 text-green-100">Complete product lifecycle tracking on blockchain</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                        <i class="fas fa-user mr-1"></i><span id="usernameBadge">Staff</span>
+                    </span>
+                    <a href="/logout" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all text-sm">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex gap-6">
+            <!-- Sidebar Navigation -->
+            <div class="w-64 bg-white rounded-lg shadow-lg p-4">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Management Options</h3>
+                <div class="space-y-2">
+                    <button onclick="showSection('register')" id="registerBtn"
+                        class="w-full text-left px-4 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-all">
+                        <i class="fas fa-plus-circle mr-2"></i>Register New Product
+                    </button>
+                    <button onclick="showSection('update')" id="updateBtn"
+                        class="w-full text-left px-4 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all">
+                        <i class="fas fa-edit mr-2"></i>Update Product Stage
+                    </button>
+                    <button onclick="showSection('search')" id="searchBtn"
+                        class="w-full text-left px-4 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all">
+                        <i class="fas fa-search mr-2"></i>Search Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="flex-1">
+                <!-- Register Product Section -->
+                <div id="registerSection" class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-green-600"></i>
+                        Register New Product
+                    </h2>
+                    
+                    <form id="registerForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product ID *</label>
+                        <input type="text" id="productId" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="e.g., APPLE-001, TOMATO-001, RICE-001">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Category *</label>
+                        <select id="category" required onchange="updateProductOptions()"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">-- Select Category --</option>
+                            <option value="Fruits">Fruits</option>
+                            <option value="Vegetables">Vegetables</option>
+                            <option value="Grains">Grains</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Pulses">Pulses</option>
+                            <option value="Spices">Spices</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Name *</label>
+                        <select id="productName" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">-- Select Product --</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Quantity (kg) *</label>
+                        <input type="number" id="quantity" required min="1"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="100">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Quality Grade *</label>
+                        <select id="qualityGrade" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="A+">A+ (Premium)</option>
+                            <option value="A">A (Excellent)</option>
+                            <option value="B">B (Good)</option>
+                            <option value="C">C (Standard)</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Farm Location *</label>
+                        <input type="text" id="farmLocation" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Enter farm location (e.g., Chennai, Coimbatore, etc.)">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Temperature</label>
+                        <input type="text" id="temperature"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="e.g., 25°C">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Humidity</label>
+                        <input type="text" id="humidity"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="e.g., 60%">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Photo</label>
+                        <input type="file" id="productPhoto" accept="image/*"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Upload product image (optional)</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Farmer Certificate</label>
+                        <input type="file" id="certificate" accept=".pdf,.jpg,.jpeg,.png"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                        <p class="text-xs text-gray-500 mt-1">Upload government verification certificate (optional)</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Water Content (%)</label>
+                        <input type="text" id="waterContent"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="e.g., 80%">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Pesticides Used</label>
+                        <select id="pesticides"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">-- Select --</option>
+                            <option value="none">None (Organic)</option>
+                            <option value="organic">Organic Pesticides</option>
+                            <option value="biopesticides">Biopesticides</option>
+                            <option value="neem">Neem Based</option>
+                            <option value="synthetic">Synthetic Pesticides</option>
+                            <option value="chemical">Chemical Pesticides</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fertilizers Used</label>
+                        <select id="fertilizers"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                            <option value="">-- Select --</option>
+                            <option value="organic">Organic Fertilizers</option>
+                            <option value="compost">Compost</option>
+                            <option value="manure">Farm Manure</option>
+                            <option value="vermicompost">Vermicompost</option>
+                            <option value="biofertilizer">Biofertilizers</option>
+                            <option value="synthetic">Synthetic Fertilizers</option>
+                            <option value="chemical">Chemical Fertilizers</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Farmer Name *</label>
+                        <input type="text" id="farmerName" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Full name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Notes</label>
+                        <textarea id="registerNotes" rows="3"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                            placeholder="Additional information"></textarea>
+                    </div>
+                    
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-check-circle mr-2"></i>Register Product & Generate QR Code
+                    </button>
+                    </form>
+
+                    <div id="registerResult" class="mt-4 hidden"></div>
+                    <div id="qrCodeDisplay" class="mt-4 hidden"></div>
+                </div>
+
+                <!-- Update Product Section -->
+                <div id="updateSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-edit text-blue-600"></i>
+                        Update Product Stage
+                    </h2>
+                    
+                    <form id="updateForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product ID *</label>
+                        <input type="text" id="updateProductId" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., BANANA-001">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Stage *</label>
+                        <select id="stage" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="0">Harvested</option>
+                            <option value="1">In Warehouse</option>
+                            <option value="2">In Transit</option>
+                            <option value="3">At Distributor</option>
+                            <option value="4">At Retailer</option>
+                            <option value="5">Sold</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                        <input type="text" id="updateLocation"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Enter location (e.g., Warehouse, Distributor, etc.)">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Temperature</label>
+                        <input type="text" id="updateTemperature"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., 25°C">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Humidity</label>
+                        <input type="text" id="updateHumidity"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="e.g., 60%">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Handler Name *</label>
+                        <input type="text" id="handlerName" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Full name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Notes</label>
+                        <textarea id="updateNotes" rows="3"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            placeholder="Update details"></textarea>
+                    </div>
+                    
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                        <i class="fas fa-sync-alt mr-2"></i>Update Stage
+                    </button>
+                    </form>
+
+                    <div id="updateResult" class="mt-4 hidden"></div>
+                </div>
+
+                <!-- Search Product Section -->
+                <div id="searchSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-search text-purple-600"></i>
+                        Search Product
+                    </h2>
+                    
+                    <div class="flex gap-4">
+                        <input type="text" id="searchProductId"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            placeholder="Enter Product ID">
+                        <button onclick="searchProduct()"
+                            class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                    </div>
+
+                    <div id="searchResult" class="mt-6 hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+        
+        // Food categories data
+        const FOOD_CATEGORIES = {
+            'Fruits': ['Apple', 'Banana', 'Orange', 'Mango', 'Grapes', 'Strawberry', 'Pineapple', 'Watermelon', 'Papaya', 'Guava'],
+            'Vegetables': ['Tomato', 'Potato', 'Onion', 'Carrot', 'Cabbage', 'Spinach', 'Broccoli', 'Cauliflower', 'Capsicum', 'Cucumber'],
+            'Grains': ['Rice', 'Wheat', 'Corn', 'Barley', 'Oats', 'Millet', 'Quinoa', 'Sorghum'],
+            'Dairy': ['Milk', 'Cheese', 'Butter', 'Yogurt', 'Curd', 'Ghee', 'Cream', 'Paneer'],
+            'Pulses': ['Lentil', 'Chickpea', 'Beans', 'Peas', 'Soybean', 'Moong', 'Masoor', 'Urad'],
+            'Spices': ['Turmeric', 'Chili', 'Coriander', 'Cumin', 'Pepper', 'Cardamom', 'Cinnamon', 'Clove'],
+            'Other': ['Honey', 'Jaggery', 'Sugar', 'Salt', 'Oil', 'Tea', 'Coffee', 'Nuts']
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Try to fetch current user info
+            fetch(`${API_URL}/api/health`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.user) document.getElementById('usernameBadge').textContent = data.user;
+                }).catch(() => {});
+        });
+
+        // Update product options based on category
+        function updateProductOptions() {
+            const category = document.getElementById('category').value;
+            const productSelect = document.getElementById('productName');
+            
+            productSelect.innerHTML = '<option value="">-- Select Product --</option>';
+            
+            if (category && FOOD_CATEGORIES[category]) {
+                FOOD_CATEGORIES[category].forEach(item => {
+                    productSelect.innerHTML += `<option value="${item}">${item}</option>`;
+                });
+            }
+        }
+
+        // Section switching function
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('registerSection').classList.add('hidden');
+            document.getElementById('updateSection').classList.add('hidden');
+            document.getElementById('searchSection').classList.add('hidden');
+            
+            // Reset all button styles
+            document.getElementById('registerBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all';
+            document.getElementById('updateBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all';
+            document.getElementById('searchBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition-all';
+            
+            // Show selected section and highlight button
+            if (section === 'register') {
+                document.getElementById('registerSection').classList.remove('hidden');
+                document.getElementById('registerBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-700 transition-all';
+            } else if (section === 'update') {
+                document.getElementById('updateSection').classList.remove('hidden');
+                document.getElementById('updateBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all';
+            } else if (section === 'search') {
+                document.getElementById('searchSection').classList.remove('hidden');
+                document.getElementById('searchBtn').className = 'w-full text-left px-4 py-3 rounded-lg bg-purple-600 text-white font-semibold hover:bg-purple-700 transition-all';
+            }
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const resultDiv = document.getElementById('registerResult');
+            const qrDiv = document.getElementById('qrCodeDisplay');
+            resultDiv.className = 'mt-4 p-4 rounded-lg';
+            resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Registering product and generating QR code...';
+            resultDiv.classList.remove('hidden');
+            qrDiv.classList.add('hidden');
+            
+            try {
+                // Create FormData for file upload
+                const formData = new FormData();
+                formData.append('productId', document.getElementById('productId').value.trim().toUpperCase());
+                formData.append('productName', document.getElementById('productName').value);
+                formData.append('quantity', document.getElementById('quantity').value);
+                formData.append('qualityGrade', document.getElementById('qualityGrade').value);
+                formData.append('farmLocation', document.getElementById('farmLocation').value);
+                formData.append('temperature', document.getElementById('temperature').value);
+                formData.append('humidity', document.getElementById('humidity').value);
+                formData.append('waterContent', document.getElementById('waterContent').value);
+                formData.append('pesticides', document.getElementById('pesticides').value);
+                formData.append('fertilizers', document.getElementById('fertilizers').value);
+                formData.append('farmerName', document.getElementById('farmerName').value);
+                formData.append('registerNotes', document.getElementById('registerNotes').value);
+                
+                // Add photo if selected
+                const photoInput = document.getElementById('productPhoto');
+                if (photoInput.files.length > 0) formData.append('productPhoto', photoInput.files[0]);
+                
+                // Add certificate if selected
+                const certificateInput = document.getElementById('certificate');
+                if (certificateInput.files.length > 0) formData.append('certificate', certificateInput.files[0]);
+                
+                const response = await fetch(`${API_URL}/api/products/register`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const organicInfo = data.organicPrediction ? 
+                        `<div class="mt-2 p-2 ${data.organicPrediction.is_organic ? 'bg-green-100' : 'bg-red-100'} rounded-lg">
+                            <p class="text-sm font-semibold ${data.organicPrediction.is_organic ? 'text-green-800' : 'text-red-800'}">
+                                <i class="fas ${data.organicPrediction.is_organic ? 'fa-leaf' : 'fa-times'}"></i>
+                                Organic: ${data.organicPrediction.is_organic ? 'Yes' : 'No'} (${data.organicPrediction.confidence}% confidence)
+                                <br>Score: ${data.organicPrediction.score}/${data.organicPrediction.max_score}
+                            </p>
+                        </div>` : '';
+                    
+                    resultDiv.className = 'mt-4 p-4 bg-green-50 border-2 border-green-500 rounded-lg';
+                    resultDiv.innerHTML = `
+                        <p class="font-bold text-green-800 text-lg mb-2">Product Registered Successfully!</p>
+                        <p class="text-sm text-gray-700"><strong>Product ID:</strong> ${data.productId}</p>
+                        ${organicInfo}
+                        <div class="bg-white p-3 rounded-lg mb-2">
+                            <p class="text-sm text-gray-600 mb-1">Transaction Hash</p>
+                            <p class="text-xs font-mono break-all text-blue-600">${data.transactionHash}</p>
+                        </div>
+                    `;
+
+                    qrDiv.className = 'mt-4 p-6 bg-blue-50 border-2 border-blue-500 rounded-lg text-center';
+                    qrDiv.innerHTML = `
+                        <h3 class="text-xl font-bold text-blue-800 mb-4">QR Code</h3>
+                        <img src="${data.qrCodeUrl}" alt="QR Code" class="mx-auto border-4 border-white shadow-lg rounded-lg mb-4" style="max-width: 300px;">
+                        <a href="${data.qrCodeUrl}" download="${data.productId}.png" 
+                           class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
+                            Download QR Code
+                        </a>
+                    `;
+                    qrDiv.classList.remove('hidden');
+                    document.getElementById('registerForm').reset();
+                } else {
+                    resultDiv.className = 'mt-4 p-4 bg-red-50 border-2 border-red-500 rounded-lg';
+                    resultDiv.innerHTML = `<p class="font-bold text-red-800">Error</p><p class="text-sm">${data.error}</p>`;
+                }
+            } catch (error) {
+                resultDiv.className = 'mt-4 p-4 bg-red-50 border-2 border-red-500 rounded-lg';
+                resultDiv.innerHTML = `<p class="font-bold text-red-800">Connection Error</p><p class="text-sm">${error.message}</p>`;
+            }
+        });
+
+        document.getElementById('updateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultDiv = document.getElementById('updateResult');
+            resultDiv.innerHTML = 'Updating...';
+            resultDiv.classList.remove('hidden');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        productId: document.getElementById('updateProductId').value.trim().toUpperCase(),
+                        stage: document.getElementById('stage').value,
+                        location: document.getElementById('updateLocation').value,
+                        temperature: document.getElementById('updateTemperature').value,
+                        humidity: document.getElementById('updateHumidity').value,
+                        handlerName: document.getElementById('handlerName').value,
+                        notes: document.getElementById('updateNotes').value
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    resultDiv.className = 'mt-4 p-4 bg-green-50 border-2 border-green-500 rounded-lg';
+                    resultDiv.innerHTML = 'Update Successful! Hash: ' + data.transactionHash;
+                    document.getElementById('updateForm').reset();
+                } else {
+                    resultDiv.className = 'mt-4 p-4 bg-red-50 border-2 border-red-500 rounded-lg';
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Connection Error: ' + error.message;
+            }
+        });
+
+        async function searchProduct() {
+            const productId = document.getElementById('searchProductId').value.trim().toUpperCase();
+            const resultDiv = document.getElementById('searchResult');
+            resultDiv.innerHTML = 'Searching...';
+            resultDiv.classList.remove('hidden');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products/${productId}`);
+                const data = await response.json();
+                if (data.success) {
+                    const product = data.product;
+                    resultDiv.innerHTML = `
+                        <h3 class="text-2xl font-bold mb-4">${product.productName}</h3>
+                        <p>ID: ${product.productId} | Stage: ${product.currentStage}</p>
+                        <img src="${product.qrCodeUrl}" style="max-width: 200px;" class="my-4">
+                        <div class="mt-4">
+                            <h4 class="font-bold">History</h4>
+                            ${product.history.map(h => `<div class="border-l-4 border-purple-500 pl-4 py-2 mt-2 bg-gray-50">${h.stage} - ${h.handlerName} (${h.timestamp})</div>`).join('')}
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = 'Connection Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
